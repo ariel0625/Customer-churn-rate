@@ -1,0 +1,70 @@
+
+\textbf{Customer Churn data}  <https://www.rdocumentation.org/packages/bayesQR/versions/2.3/topics/Churn>
+
+The dataset is random sample from all active customers (at the end of June 2006) of a European financial services company. The data captures the churn behavior of the customers in the period from July 1st until December 31th 2006. Here a churned customer is defined as someone who closed all his/her bank accounts with the company.
+
+1). Read and inspect the data. *Hint: the file is an fst fast-storage format file. Check your regression lab to figure out how you can read this file*
+
+```{r}
+data("Churn")
+
+churn_data<-read_fst(
+  '/Users/leechenhsin/Desktop/study@USA/07_UW_School/IMT573/churn.fst',
+  columns = NULL,
+  from = 1,
+  to = NULL,
+  as.data.table = FALSE,
+  old_format = FALSE
+)
+
+```
+
+2). Describe the data and variables that are part of the churn dataset.
+
+```{r}
+#churn : churn (yes/no)
+#gender : gender of the customer (male = 1)
+#Social_Class_Score : social class of the customer
+#lor : length of relationship with the customer
+#recency : number of days since last purchase
+#time_since_first_purchase : the standardization of time since first purchase
+#time_since_last_purchase : the standardization of time since last purchase
+```
+
+3). Considering this data in context, what is the response variable of interest?
+
+```{r}
+#churn is the response variable of interest
+
+```
+
+4). Our goal is to determine customer churn. Which variables do you think are the most important ones to describe customer churn? How should those be related to the churn? Interpret your results.
+
+```{r}
+model1 <- glm(churn ~ gender, data =Churn,family=binomial)
+summary(model1)
+#since its p-value is  0.317, which is larger than 0.05,
+#so it means that the gender does not have a strong regression with churn
+
+model2 <- glm(churn ~ Social_Class_Score, data =Churn,family=binomial)
+summary(model2)
+#since its p-value is 0.765, which is larger than 0.05,
+#so it means that the Social_Class_Score does not have a strong regression
+#with churn
+
+model3 <- glm(churn ~ lor, data =Churn,family=binomial)
+summary(model3)
+#since its p-value is 0.00139, which is smaller than 0.05,
+#so it means that the lor,length of relationship with the customer
+#has a strong regression with churn
+
+model4 <- glm(churn ~ recency, data =Churn,family=binomial)
+summary(model4)
+#since its p-value is 0.00607, which is smaller than 0.05,
+#so it means that the recency has a strong regression with churn
+
+
+#lor,length of relationship and recency are the most important ones to 
+#describe customer churn 
+
+```
